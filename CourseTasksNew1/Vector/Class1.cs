@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vector
 {
-    class Program
+    class Class1
     {
         static void Main(string[] args)
         {
@@ -14,3 +14,5 @@ namespace Vector
         }
     }
 }
+    
+
