@@ -39,66 +39,50 @@ namespace Range
 
         public Range GetIntersection(Range range)
         {
-            if (To < range.From || range.To < From)
+            if (To <= range.From || range.To <= From)
             {
                 return null;
             }
 
-            double[] array = { To, From, range.To, range.From };
-            Array.Sort(array);
-
-            Range intersectionRanges = new Range(array[1], array[2]);
+            Range intersectionRanges = new Range((From > range.From) ? From : range.From, (To < range.To) ? To : range.To);
             return intersectionRanges;
         }
 
         public Range[] GetUnion(Range range)
         {
-            Range[] unionRangesArray = null;
             if (To < range.From || range.To < From)
             {
-                unionRangesArray = new Range[2];
                 Range newRange1 = new Range(From, To);
                 Range newRange2 = new Range(range.From, range.To);
 
-                unionRangesArray[0] = newRange1;
-                unionRangesArray[1] = newRange2;
-
-                return unionRangesArray;
+                return new Range[] { newRange1, newRange2 };
             }
 
-            double[] array = { To, From, range.To, range.From };
-            Array.Sort(array);
-
-            Range unionRanges = new Range(array[0], array[3]);
-            unionRangesArray = new Range[1];
-            unionRangesArray[0] = unionRanges;
-
-            return unionRangesArray;
+            Range unionRanges = new Range((From < range.From) ? From : range.From, (To > range.To) ? To : range.To);
+            return new Range[] { unionRanges };
         }
 
         public Range[] GetDifference(Range range)
         {
-            Range[] differenceRangesArray = null;
-            double[] array = { To, From, range.To, range.From };
-            Array.Sort(array);
-
-            if ((From < range.From && range.To < To) || (range.From < From && To < range.To))
+            if (To <= range.From || range.To <= From)
             {
-                differenceRangesArray = new Range[2];
-                Range newRange1 = new Range(array[0], array[1]);
-                Range newRange2 = new Range(array[2], array[3]);
+                Range differenceRanges = new Range(From, To);
+                return new Range[] { differenceRanges };
+            }
+            else if (From <= range.From && range.To >= To)
+            {
+                Range differenceRanges = new Range(From, range.From);
+                return new Range[] { differenceRanges };
+            }
+            else if (From < range.From)
+            {
+                Range newRange1 = new Range(From, range.From);
+                Range newRange2 = new Range(range.To, To);
 
-                differenceRangesArray[0] = newRange1;
-                differenceRangesArray[1] = newRange2;
-
-                return differenceRangesArray;
+                return new Range[] { newRange1, newRange2 };
             }
 
-            Range differenceRanges = new Range(array[0], array[1]);
-            differenceRangesArray = new Range[1];
-            differenceRangesArray[0] = differenceRanges;
-
-            return differenceRangesArray;
+            return new Range[] { null };
         }
 
         public void Print()

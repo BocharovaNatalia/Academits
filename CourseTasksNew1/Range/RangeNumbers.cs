@@ -10,10 +10,10 @@ namespace Range
     {
         public static void Main(string[] args)
         {
-            Range range1 = new Range(4, 6);
+            Range range1 = new Range(2, 5);
             Console.WriteLine("Длина диапазона чисел = " + range1.GetLength());
 
-            Range range2 = new Range(5, 10);
+            Range range2 = new Range(1, 5);
             bool isNumberInside = range2.IsInside(10);
 
             if (isNumberInside)
@@ -48,7 +48,14 @@ namespace Range
             Console.Write("Разность интервалов: ");
             foreach (Range е in differenceRanges)
             {
-                е.Print();
+                if (е == null)
+                {
+                    Console.WriteLine("Интервал отсутствует");
+                }
+                else
+                {
+                    е.Print();
+                }
             }
         }
     }
