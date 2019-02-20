@@ -10,10 +10,10 @@ namespace Range
     {
         public static void Main(string[] args)
         {
-            Range range1 = new Range(2, 5);
+            Range range1 = new Range(3, 7);
             Console.WriteLine("Длина диапазона чисел = " + range1.GetLength());
 
-            Range range2 = new Range(1, 5);
+            Range range2 = new Range(1, 7);
             bool isNumberInside = range2.IsInside(10);
 
             if (isNumberInside)
@@ -33,29 +33,22 @@ namespace Range
             }
             else
             {
-                Console.Write("Пересечение интервалов: ");
+                Console.WriteLine("Пересечение интервалов: ");
                 intersectionRanges.Print();
             }
 
             Range[] unionRanges = range1.GetUnion(range2);
-            Console.Write("Объединение интервалов: ");
+            Console.WriteLine("Объединение интервалов: ");
             foreach (Range е in unionRanges)
             {
                 е.Print();
             }
 
             Range[] differenceRanges = range1.GetDifference(range2);
-            Console.Write("Разность интервалов: ");
+            Console.WriteLine("Разность интервалов: ");
             foreach (Range е in differenceRanges)
             {
-                if (е == null)
-                {
-                    Console.WriteLine("Интервал отсутствует");
-                }
-                else
-                {
-                    е.Print();
-                }
+                е.Print();
             }
         }
     }

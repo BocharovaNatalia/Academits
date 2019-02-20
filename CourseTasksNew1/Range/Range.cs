@@ -44,7 +44,7 @@ namespace Range
                 return null;
             }
 
-            Range intersectionRanges = new Range((From > range.From) ? From : range.From, (To < range.To) ? To : range.To);
+            Range intersectionRanges = new Range(Math.Max(From, range.From), Math.Min(To, range.To));
             return intersectionRanges;
         }
 
@@ -58,7 +58,7 @@ namespace Range
                 return new Range[] { newRange1, newRange2 };
             }
 
-            Range unionRanges = new Range((From < range.From) ? From : range.From, (To > range.To) ? To : range.To);
+            Range unionRanges = new Range(Math.Min(From, range.From), Math.Max(To, range.To));
             return new Range[] { unionRanges };
         }
 
@@ -74,6 +74,11 @@ namespace Range
                 Range differenceRanges = new Range(From, range.From);
                 return new Range[] { differenceRanges };
             }
+            else if (range.From < From && To > range.To)
+            {
+                Range differenceRanges = new Range(range.To, To);
+                return new Range[] { differenceRanges };
+            }
             else if (From < range.From)
             {
                 Range newRange1 = new Range(From, range.From);
@@ -82,7 +87,7 @@ namespace Range
                 return new Range[] { newRange1, newRange2 };
             }
 
-            return new Range[] { null };
+            return new Range[] { };
         }
 
         public void Print()
