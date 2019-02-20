@@ -10,7 +10,7 @@ namespace Range
     {
         public static void Main(string[] args)
         {
-            Range range1 = new Range(3, 7);
+            Range range1 = new Range(1, 7);
             Console.WriteLine("Длина диапазона чисел = " + range1.GetLength());
 
             Range range2 = new Range(1, 7);
