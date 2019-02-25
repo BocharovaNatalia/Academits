@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Shapes
 {
-    class Square:IShape
+    class Square : Shape
     {
         public double SideLength
         {
@@ -19,24 +19,42 @@ namespace Shapes
             SideLength = sideLength;
         }
 
-        public double GetWidth()
+        public override double GetWidth()
         {
             return SideLength;
         }
 
-        public double GetHeight()
+        public override double GetHeight()
         {
             return SideLength;
         }
 
-        public double GetArea()
+        public override double GetArea()
         {
             return SideLength * SideLength;
         }
 
-        public double GetPerimeter()
+        public override double GetPerimeter()
         {
             return SideLength * 4;
+        }
+
+        public override string ToString()
+        {
+            return "Квадрат, длина стороны = " + SideLength;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(obj, this)) return true;
+            if (ReferenceEquals(obj, null) || obj.GetType() != this.GetType()) return false;
+            Square s = (Square)obj;
+            return SideLength == s.SideLength;
+        }
+
+        public override int GetHashCode()
+        {
+            return (int)SideLength;
         }
     }
 }

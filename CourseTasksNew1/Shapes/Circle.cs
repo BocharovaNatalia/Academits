@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Shapes
 {
-    class Circle : IShape
+    class Circle : Shape
     {
         public double Radius
         {
@@ -19,24 +19,42 @@ namespace Shapes
             Radius = radius;
         }
 
-        public double GetWidth()
+        public override double GetWidth()
         {
             return Radius * 2;
         }
 
-        public double GetHeight()
+        public override double GetHeight()
         {
             return Radius * 2;
         }
 
-        public double GetArea()
+        public override double GetArea()
         {
             return Math.PI * Radius * Radius;
         }
 
-        public double GetPerimeter()
+        public override double GetPerimeter()
         {
             return 2 * Math.PI * Radius;
+        }
+
+        public override string ToString()
+        {
+            return "Окружность, радиус = " + Radius;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(obj, this)) return true;
+            if (ReferenceEquals(obj, null) || obj.GetType() != this.GetType()) return false;
+            Circle c = (Circle)obj;
+            return Radius == c.Radius;
+        }
+
+        public override int GetHashCode()
+        {
+            return (int) Radius;
         }
     }
 }
