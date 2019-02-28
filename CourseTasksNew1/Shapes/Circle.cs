@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Shapes
 {
-    class Circle : Shape
+    class Circle : IShape
     {
         public double Radius
         {
@@ -19,22 +19,22 @@ namespace Shapes
             Radius = radius;
         }
 
-        public override double GetWidth()
+        public double GetWidth()
         {
             return Radius * 2;
         }
 
-        public override double GetHeight()
+        public double GetHeight()
         {
             return Radius * 2;
         }
 
-        public override double GetArea()
+        public double GetArea()
         {
             return Math.PI * Radius * Radius;
         }
 
-        public override double GetPerimeter()
+        public double GetPerimeter()
         {
             return 2 * Math.PI * Radius;
         }
@@ -46,15 +46,21 @@ namespace Shapes
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(obj, this)) return true;
-            if (ReferenceEquals(obj, null) || obj.GetType() != this.GetType()) return false;
+            if (ReferenceEquals(obj, this))
+            {
+                return true;
+            }
+            if (ReferenceEquals(obj, null) || obj.GetType() != this.GetType())
+            {
+                return false;
+            }
             Circle c = (Circle)obj;
             return Radius == c.Radius;
         }
 
         public override int GetHashCode()
         {
-            return (int) Radius;
+            return Radius.GetHashCode();
         }
     }
 }

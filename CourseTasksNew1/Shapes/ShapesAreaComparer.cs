@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace Shapes
 {
-    class ShapesAreaComparer : IComparer<Shape>
+    class ShapesAreaComparer : IComparer<IShape>
     {
-        public int Compare(Shape s1, Shape s2)
+        public int Compare(IShape s1, IShape s2)
         {
-            if (s1.GetArea() > s2.GetArea()) return 1;
-            if (s1.GetArea() < s2.GetArea()) return -1;
-            return 0;
+            return s2.GetArea().CompareTo(s1.GetArea());
         }
     }
 }
