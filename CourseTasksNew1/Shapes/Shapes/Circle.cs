@@ -6,42 +6,42 @@ using System.Threading.Tasks;
 
 namespace Shapes
 {
-    class Square : IShape
+    class Circle : IShape
     {
-        public double SideLength
+        public double Radius
         {
             get;
             set;
         }
 
-        public Square(double sideLength)
+        public Circle(double radius)
         {
-            SideLength = sideLength;
+            Radius = radius;
         }
 
         public double GetWidth()
         {
-            return SideLength;
+            return Radius * 2;
         }
 
         public double GetHeight()
         {
-            return SideLength;
+            return Radius * 2;
         }
 
         public double GetArea()
         {
-            return SideLength * SideLength;
+            return Math.PI * Radius * Radius;
         }
 
         public double GetPerimeter()
         {
-            return SideLength * 4;
+            return 2 * Math.PI * Radius;
         }
 
         public override string ToString()
         {
-            return "Квадрат, длина стороны = " + SideLength;
+            return "Окружность, радиус = " + Radius;
         }
 
         public override bool Equals(object obj)
@@ -50,17 +50,19 @@ namespace Shapes
             {
                 return true;
             }
-            if (ReferenceEquals(obj, null) || obj.GetType() != this.GetType())
+            if (ReferenceEquals(obj, null) || obj.GetType() != GetType())
             {
                 return false;
             }
-            Square s = (Square)obj;
-            return SideLength == s.SideLength;
+
+            Circle c = (Circle)obj;
+
+            return Radius == c.Radius;
         }
 
         public override int GetHashCode()
         {
-            return SideLength.GetHashCode();
+            return Radius.GetHashCode();
         }
     }
 }

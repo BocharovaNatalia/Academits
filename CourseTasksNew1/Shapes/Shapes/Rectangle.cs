@@ -57,11 +57,13 @@ namespace Shapes
             {
                 return true;
             }
-            if (ReferenceEquals(obj, null) || obj.GetType() != this.GetType())
+            if (ReferenceEquals(obj, null) || obj.GetType() != GetType())
             {
                 return false;
             }
+
             Rectangle r = (Rectangle)obj;
+
             return SideLength1 == r.SideLength1 && SideLength2 == r.SideLength2;
         }
 
@@ -71,6 +73,7 @@ namespace Shapes
             int hash = 1;
             hash = prime * hash + SideLength1.GetHashCode();
             hash = prime * hash + SideLength2.GetHashCode();
+
             return hash;
         }
     }

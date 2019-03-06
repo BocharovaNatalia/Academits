@@ -8,13 +8,7 @@ namespace Vector
 {
     class Vector
     {
-        public int Dimension
-        {
-            get;
-            set;
-        }
-
-        public double[] Components
+        private double[] Components
         {
             get;
             set;
@@ -27,32 +21,20 @@ namespace Vector
                 throw new ArgumentException("dimension must be > 0", nameof(dimension));
             }
 
-            Dimension = dimension;
+            Components = new double[dimension];
 
-            Components = new double[Dimension];
-
-            for (int i = 0; i < Dimension; i++)
-            {
-                Components[i] = 0;
-            }
         }
 
         public Vector(Vector v)
         {
-            Dimension = v.Dimension;
             Components = v.Components;
         }
 
         public Vector(double[] components)
         {
-            Dimension = components.Length;
+            Components = new double[components.Length];
 
-            Components = new double[Dimension];
-
-            for (int i = 0; i < components.Length; i++)
-            {
-                Components[i] = components[i];
-            }
+            Array.Copy(components, Components, components.Length);
         }
 
         public Vector(double[] components, int dimension)
@@ -62,14 +44,9 @@ namespace Vector
                 throw new ArgumentException("dimension must be > 0", nameof(dimension));
             }
 
-            Dimension = dimension;
+            Components = new double[dimension];
 
-            Components = new double[Dimension];
-
-            for (int i = 0; i < components.Length; i++)
-            {
-                Components[i] = components[i];
-            }
+            Array.Copy(components, Components, components.Length);
 
             if (dimension > components.Length)
             {
@@ -82,39 +59,30 @@ namespace Vector
 
         public int GetSize()
         {
-            return Dimension;
+            return Components.Length;
         }
 
         public override string ToString()
         {
-            return string.Format("{{ {0} }}", string.Join(" , ", Components));
+            return string.Format("{{ {0} }}", string.Join(",", Components));
         }
 
         public Vector GetSum(Vector v)
         {
-            int maxLength = Math.Max(Dimension, v.Dimension);
-            int minLength = Math.Min(Dimension, v.Dimension);
-
-            Vector vector = new Vector(Components, maxLength);
+            Vector vector = new Vector(this);
+            int maxLength = Math.Max(Components.Length, v.Components.Length);
+            int minLength = Math.Min(Components.Length, v.Components.Length);
 
             for (int i = 0; i < minLength; i++)
             {
-                vector.Components[i] += v.Components[i];
+                Components[i] += v.Components[i];
             }
 
-            if (vector.GetSize() > v.GetSize())
+            if (GetSize() < v.GetSize())
             {
                 for (int i = minLength; i < maxLength; i++)
                 {
-                    vector.Components[i] = vector.Components[i];
-                }
-            }
-
-            if (vector.GetSize() < v.GetSize())
-            {
-                for (int i = minLength; i < maxLength; i++)
-                {
-                    vector.Components[i] = v.Components[i];
+                    Components[i] = v.Components[i];
                 }
             }
             return vector;
@@ -122,10 +90,10 @@ namespace Vector
 
         public Vector GetDifference(Vector v)
         {
-            int maxLength = Math.Max(Dimension, v.Dimension);
-            int minLength = Math.Min(Dimension, v.Dimension);
+            int maxLength = Math.Max(Components.Length, v.Components.Length);
+            int minLength = Math.Min(Components.Length, v.Components.Length);
 
-            Vector vector = new Vector(Components, maxLength);
+            Vector vector = new Vector(this);
 
             for (int i = 0; i < minLength; i++)
             {
@@ -151,7 +119,8 @@ namespace Vector
             return vector;
         }
 
-        public Vector GetScalarProduct(int scalar)
+        public Vector Get(int scalar)
+            +
         {
             Vector vector = new Vector(Components, Dimension);
 

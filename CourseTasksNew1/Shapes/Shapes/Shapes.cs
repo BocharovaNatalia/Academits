@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Shapes
 {
-    class Shapes
+    public class Shapes
     {
         static void Main(string[] args)
         {
