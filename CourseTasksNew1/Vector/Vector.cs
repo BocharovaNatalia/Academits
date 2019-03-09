@@ -119,12 +119,11 @@ namespace Vector
             return vector;
         }
 
-        public Vector Get(int scalar)
-            +
+        public Vector GetProductWithScalar(int scalar)
         {
-            Vector vector = new Vector(Components, Dimension);
+            Vector vector = new Vector(this);
 
-            for (int i = 0; i < vector.Dimension; i++)
+            for (int i = 0; i < vector.Components.Length; i++)
             {
                 vector.Components[i] *= scalar;
             }
@@ -134,11 +133,11 @@ namespace Vector
 
         public Vector GetTurn()
         {
-            Vector vector = new Vector(Components, Dimension);
+            Vector vector = new Vector(this);
 
             int turnIndex = -1;
 
-            for (int i = 0; i < vector.Dimension; i++)
+            for (int i = 0; i < vector.Components.Length; i++)
             {
                 vector.Components[i] *= turnIndex;
             }
@@ -150,9 +149,9 @@ namespace Vector
         {
             double sumPowComponents = 0;
 
-            for (int i = 0; i < Dimension; i++)
+            foreach (double е in Components)
             {
-                sumPowComponents += Components[i] * Components[i];
+                sumPowComponents += е * е;
             }
 
             return Math.Sqrt(sumPowComponents);
@@ -160,21 +159,17 @@ namespace Vector
 
         public double GetElementByIndex(int index)
         {
-            if (index > GetSize())
+            if (index >= GetSize() || index < 0)
             {
-                throw new ArgumentException("index must be <= vector's size", nameof(index));
+                throw new ArgumentOutOfRangeException("index must be >=0 and < vector's size", nameof(index));
             }
 
-            double element = 0;
-            for (int i = 0; i < Dimension; i++)
-            {
-                if (i == index)
-                {
-                    element = Components[i];
-                }
-            }
+            return Components[index];
+        }
 
-            return element;
+        public void SetElementByIndex(int index, double element)
+        {
+            Components[index] = element;
         }
 
         public override bool Equals(object obj)
@@ -190,7 +185,26 @@ namespace Vector
 
             Vector v = (Vector)obj;
 
-            return Dimension == v.Dimension && Components.Equals(v.Components);
+            return Components.Length == v.Components.Length && IsComponentsEqual(Components, v.Components);
+        }
+
+        public bool IsComponentsEqual(double[] array1, double[] array2)
+        {
+            if (array1.Length != array2.Length)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < array1.Length; i++)
+            {
+                const double epsilon = 1.0e-10;
+                if (Math.Abs(array1[i] - array2[i]) > epsilon)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public override int GetHashCode()
@@ -198,97 +212,36 @@ namespace Vector
             int prime = 37;
             int hash = 1;
 
-            for (int i = 0; i < Dimension; i++)
+            for (int i = 0; i < Components.Length; i++)
             {
                 hash = prime * hash + Components[i].GetHashCode();
             }
 
-            return hash + Dimension;
+            return hash;
         }
 
         public static Vector GetSum(Vector v1, Vector v2)
         {
-            int maxLength = Math.Max(v1.Dimension, v2.Dimension);
-            int minLength = Math.Min(v1.Dimension, v2.Dimension);
-
-            Vector vector = new Vector(maxLength);
-
-            for (int i = 0; i < minLength; i++)
-            {
-                vector.Components[i] = v1.Components[i] + v2.Components[i];
-            }
-
-            if (v1.GetSize() > v2.GetSize())
-            {
-                for (int i = minLength; i < maxLength; i++)
-                {
-                    vector.Components[i] = v1.Components[i];
-                }
-            }
-
-            if (v1.GetSize() < v2.GetSize())
-            {
-                for (int i = minLength; i < maxLength; i++)
-                {
-                    vector.Components[i] = v2.Components[i];
-                }
-            }
-
-            return vector;
+            return v1.GetSum(v2);
         }
 
         public static Vector GetDifference(Vector v1, Vector v2)
         {
-            int maxLength = Math.Max(v1.Dimension, v2.Dimension);
-            int minLength = Math.Min(v1.Dimension, v2.Dimension);
-
-            Vector vector = new Vector(maxLength);
-
-            for (int i = 0; i < minLength; i++)
-            {
-                vector.Components[i] = v1.Components[i] - v2.Components[i];
-            }
-
-            if (v1.GetSize() > v2.GetSize())
-            {
-                for (int i = minLength; i < maxLength; i++)
-                {
-                    vector.Components[i] = v1.Components[i];
-                }
-            }
-
-            if (v1.GetSize() < v2.GetSize())
-            {
-                for (int i = minLength; i < maxLength; i++)
-                {
-                    vector.Components[i] = -v2.Components[i];
-                }
-            }
-
-            return vector;
+            return v1.GetDifference(v2);
         }
 
-        public static Vector GetScalarProductVectors(Vector v1, Vector v2)
+        public static double GetScalarProductOfVectors(Vector v1, Vector v2)
         {
-            int maxLength = Math.Max(v1.Dimension, v2.Dimension);
-            int minLength = Math.Min(v1.Dimension, v2.Dimension);
+            int minLength = Math.Min(v1.Components.Length, v2.Components.Length);
 
-            Vector vector = new Vector(maxLength);
+            double scalarProductOfVector = 0;
 
             for (int i = 0; i < minLength; i++)
             {
-                vector.Components[i] = v1.Components[i] * v2.Components[i];
+                scalarProductOfVector += v1.Components[i] * v2.Components[i];
             }
 
-            if (v1.GetSize() > v2.GetSize() || v1.GetSize() < v2.GetSize())
-            {
-                for (int i = minLength; i < maxLength; i++)
-                {
-                    vector.Components[i] = 0;
-                }
-            }
-
-            return vector;
+            return scalarProductOfVector;
         }
     }
 }

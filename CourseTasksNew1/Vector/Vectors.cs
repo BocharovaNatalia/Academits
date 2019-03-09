@@ -12,7 +12,7 @@ namespace Vector
         {
             Vector v1 = new Vector(5);
             Vector v2 = new Vector(v1);
-            Vector v3 = new Vector(new double[] { 1, 4, 7, 8, 9 });
+            Vector v3 = new Vector(new double[] { 1, 2, 3, 4, 5 });
             Vector v4 = new Vector(new double[] { 0, 3, 5, 8, 10, 12, 14 });
 
             Console.WriteLine(v1.ToString());
@@ -26,7 +26,7 @@ namespace Vector
 
             Vector v6 = v2.GetDifference(v4);
 
-            Console.WriteLine(v6.GetScalarProduct(2));
+            Console.WriteLine(v6.GetProductWithScalar(2));
 
             Console.WriteLine(v4.GetTurn());
 
@@ -38,9 +38,9 @@ namespace Vector
 
             Console.WriteLine(v7.GetElementByIndex(1));
 
-            Vector v8 = Vector.GetScalarProductVectors(v4, v3);
+            Console.WriteLine(Vector.GetScalarProductOfVectors(v4, v3));
 
-            Vector v9 = Vector.GetSum(v7, v8);
+            Vector v9 = Vector.GetSum(v7, v6);
 
             Console.WriteLine(v7.ToString());
         }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shapes
+namespace Shapes.Shapes
 {
 
     class Triangle : IShape
@@ -55,17 +55,17 @@ namespace Shapes
             Y3 = y3;
         }
 
-        public double GetMaxPoint(double point1, double point2, double point3)
+        protected static double GetMaxPoint(double point1, double point2, double point3)
         {
             return Math.Max(point1, Math.Max(point2, point3));
         }
 
-        public double GetMinPoint(double point1, double point2, double point3)
+        protected static double GetMinPoint(double point1, double point2, double point3)
         {
             return Math.Min(point1, Math.Min(point2, point3));
         }
 
-        public double GetSectionLength(double point1, double point2, double point3)
+        protected static double GetSectionLength(double point1, double point2, double point3)
         {
             return GetMaxPoint(point1, point2, point3) - GetMinPoint(point1, point2, point3);
         }
@@ -80,9 +80,9 @@ namespace Shapes
             return GetSectionLength(Y1, Y2, Y3);
         }
 
-        public double GetSideLength(double point1, double point2, double point3, double point4)
+        protected static double GetSideLength(double coordinateX1, double coordinateX2, double coordinateY1, double coordinateY2)
         {
-            return Math.Sqrt(Math.Pow((point1 - point2), 2) + Math.Pow((point3 - point4), 2));
+            return Math.Sqrt(Math.Pow((coordinateX1 - coordinateX2), 2) + Math.Pow((coordinateY1 - coordinateY2), 2));
         }
 
         public double GetLength1()

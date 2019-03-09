@@ -1,10 +1,11 @@
 ﻿using System;
+using Shapes.Shapes;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shapes
+namespace Shapes.Comparers
 {
     class ShapesAreaComparer : IComparer<IShape>
     {

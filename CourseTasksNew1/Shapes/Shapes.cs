@@ -1,4 +1,6 @@
 ﻿using System;
+using Shapes.Shapes;
+using Shapes.Comparers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Shapes
 {
-    public class Shapes
+    public class Shape
     {
         static void Main(string[] args)
         {
