@@ -69,51 +69,64 @@ namespace Vector
 
         public Vector GetSum(Vector v)
         {
-            Vector vector = new Vector(this);
-            int maxLength = Math.Max(Components.Length, v.Components.Length);
-            int minLength = Math.Min(Components.Length, v.Components.Length);
-
-            for (int i = 0; i < minLength; i++)
-            {
-                Components[i] += v.Components[i];
-            }
-
             if (GetSize() < v.GetSize())
             {
-                for (int i = minLength; i < maxLength; i++)
+                double[] newComponents = new double[v.Components.Length];
+
+                for (int i = 0; i < v.Components.Length; i++)
                 {
-                    Components[i] = v.Components[i];
+                    if (i < Components.Length)
+                    {
+                        newComponents[i] = v.Components[i] + Components[i];
+                    }
+                    newComponents[i] = v.Components[i];
                 }
+
+                return new Vector(newComponents);
             }
+
+            Vector vector = new Vector(this);
+
+            for (int i = 0; i < Components.Length; i++)
+            {
+                if (i < v.Components.Length)
+                {
+                    vector.Components[i] = v.Components[i] + Components[i];
+                }
+                vector.Components[i] = Components[i];
+            }
+
             return vector;
         }
 
         public Vector GetDifference(Vector v)
         {
-            int maxLength = Math.Max(Components.Length, v.Components.Length);
-            int minLength = Math.Min(Components.Length, v.Components.Length);
+            if (GetSize() < v.GetSize())
+            {
+                double[] newComponents = new double[v.Components.Length];
+
+                for (int i = 0; i < v.Components.Length; i++)
+                {
+                    if (i < Components.Length)
+                    {
+                        newComponents[i] = Components[i] - v.Components[i];
+                    }
+                    newComponents[i] = -v.Components[i];
+                }
+
+                return new Vector(newComponents);
+            }
 
             Vector vector = new Vector(this);
 
-            for (int i = 0; i < minLength; i++)
+            for (int i = 0; i < Components.Length; i++)
             {
-                vector.Components[i] -= v.Components[i];
-            }
-
-            if (vector.GetSize() > v.GetSize())
-            {
-                for (int i = minLength; i < maxLength; i++)
+                if (i < v.Components.Length)
                 {
-                    vector.Components[i] = vector.Components[i];
+                    vector.Components[i] -= v.Components[i];
                 }
-            }
 
-            if (vector.GetSize() < v.GetSize())
-            {
-                for (int i = minLength; i < maxLength; i++)
-                {
-                    vector.Components[i] = -v.Components[i];
-                }
+                vector.Components[i] = Components[i];
             }
 
             return vector;
@@ -169,6 +182,11 @@ namespace Vector
 
         public void SetElementByIndex(int index, double element)
         {
+            if (index >= GetSize() || index < 0)
+            {
+                throw new ArgumentOutOfRangeException("index must be >=0 and < vector's size", nameof(index));
+            }
+
             Components[index] = element;
         }
 
@@ -185,10 +203,10 @@ namespace Vector
 
             Vector v = (Vector)obj;
 
-            return Components.Length == v.Components.Length && IsComponentsEqual(Components, v.Components);
+            return Components.Length == v.Components.Length && IsComponentsEquals(Components, v.Components);
         }
 
-        public bool IsComponentsEqual(double[] array1, double[] array2)
+        public bool IsComponentsEquals(double[] array1, double[] array2)
         {
             if (array1.Length != array2.Length)
             {
@@ -222,12 +240,14 @@ namespace Vector
 
         public static Vector GetSum(Vector v1, Vector v2)
         {
-            return v1.GetSum(v2);
+            Vector newVector = new Vector(v1.Components);
+            return newVector.GetSum(v2);
         }
 
         public static Vector GetDifference(Vector v1, Vector v2)
         {
-            return v1.GetDifference(v2);
+            Vector newVector = new Vector(v1.Components);
+            return newVector.GetDifference(v2);
         }
 
         public static double GetScalarProductOfVectors(Vector v1, Vector v2)

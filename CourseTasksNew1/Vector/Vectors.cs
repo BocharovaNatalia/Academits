@@ -12,7 +12,7 @@ namespace Vector
         {
             Vector v1 = new Vector(5);
             Vector v2 = new Vector(v1);
-            Vector v3 = new Vector(new double[] { 1, 2, 3, 4, 5 });
+            Vector v3 = new Vector(new double[] { 1, 2, 3, 4, 5, 6, 2 });
             Vector v4 = new Vector(new double[] { 0, 3, 5, 8, 10, 12, 14 });
 
             Console.WriteLine(v1.ToString());
@@ -20,29 +20,32 @@ namespace Vector
             Console.WriteLine(v3.ToString());
             Console.WriteLine(v4.ToString());
 
-            Vector v5 = v3.GetSum(v4);
+            Console.WriteLine(v4.GetSum(v3));
+
+            Console.WriteLine(v4.ToString());
+
+            Vector v5 = new Vector(v3.GetDifference(v4));
 
             Console.WriteLine(v5.GetSize());
 
-            Vector v6 = v2.GetDifference(v4);
+            Console.WriteLine(v3.GetTurn());
 
-            Console.WriteLine(v6.GetProductWithScalar(2));
+            Console.WriteLine(v5.GetProductWithScalar(2));
 
-            Console.WriteLine(v4.GetTurn());
+            Console.WriteLine(v5.GetElementByIndex(6));
 
-            Console.WriteLine(v3.GetLength());
+            Console.WriteLine(v1.Equals(v2));
 
-            Vector v7 = Vector.GetDifference(v4, v3);
+            v1.SetElementByIndex(0, 7);
+            Console.WriteLine(v1.ToString());
 
-            Console.WriteLine(v7.ToString());
+            Console.WriteLine(v2.ToString());
 
-            Console.WriteLine(v7.GetElementByIndex(1));
+            Vector v6 = Vector.GetSum(v1, v2);
+            Console.WriteLine(v6.ToString());
 
-            Console.WriteLine(Vector.GetScalarProductOfVectors(v4, v3));
-
-            Vector v9 = Vector.GetSum(v7, v6);
-
-            Console.WriteLine(v7.ToString());
+            double scalarProduct = Vector.GetScalarProductOfVectors(v1, v6);
+            Console.WriteLine(scalarProduct);
         }
     }
 }
