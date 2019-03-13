@@ -22,38 +22,46 @@ namespace Vector
             }
 
             Components = new double[dimension];
-
         }
 
         public Vector(Vector v)
         {
-            Components = v.Components;
+            Components = new double[v.Components.Length];
+            Array.Copy(v.Components, Components, v.Components.Length);
         }
 
         public Vector(double[] components)
         {
-            Components = new double[components.Length];
+            if (components == null)
+            {
+                throw new ArgumentNullException(nameof(components), "components can't be null");
+            }
 
+            Components = new double[components.Length];
             Array.Copy(components, Components, components.Length);
         }
 
-        public Vector(double[] components, int dimension)
+        public Vector(int dimension, double[] components)
         {
             if (dimension <= 0)
             {
                 throw new ArgumentException("dimension must be > 0", nameof(dimension));
             }
 
-            Components = new double[dimension];
-
-            Array.Copy(components, Components, components.Length);
-
-            if (dimension > components.Length)
+            if (components == null)
             {
-                for (int i = components.Length; i < dimension; i++)
-                {
-                    Components[i] = 0;
-                }
+                throw new ArgumentNullException(nameof(components), "components can't be null");
+            }
+
+            if (dimension >= components.Length)
+            {
+                Components = new double[dimension];
+                Array.Copy(components, Components, components.Length);
+            }
+            else
+            {
+                Components = new double[dimension];
+                Array.Copy(components, Components, dimension);
             }
         }
 
@@ -64,7 +72,7 @@ namespace Vector
 
         public override string ToString()
         {
-            return string.Format("{{ {0} }}", string.Join(",", Components));
+            return string.Format("{{ {0} }}", string.Join(", ", Components));
         }
 
         public Vector GetSum(Vector v)
@@ -79,24 +87,26 @@ namespace Vector
                     {
                         newComponents[i] = v.Components[i] + Components[i];
                     }
-                    newComponents[i] = v.Components[i];
+                    else
+                    {
+                        newComponents[i] = v.Components[i];
+                    }
                 }
 
-                return new Vector(newComponents);
+                Components = newComponents;
             }
-
-            Vector vector = new Vector(this);
-
-            for (int i = 0; i < Components.Length; i++)
+            else
             {
-                if (i < v.Components.Length)
+                for (int i = 0; i < Components.Length; i++)
                 {
-                    vector.Components[i] = v.Components[i] + Components[i];
+                    if (i < v.Components.Length)
+                    {
+                        Components[i] += v.Components[i];
+                    }
                 }
-                vector.Components[i] = Components[i];
             }
 
-            return vector;
+            return this;
         }
 
         public Vector GetDifference(Vector v)
@@ -111,51 +121,48 @@ namespace Vector
                     {
                         newComponents[i] = Components[i] - v.Components[i];
                     }
-                    newComponents[i] = -v.Components[i];
+                    else
+                    {
+                        newComponents[i] = -v.Components[i];
+                    }
                 }
 
-                return new Vector(newComponents);
+                Components = newComponents;
             }
-
-            Vector vector = new Vector(this);
-
-            for (int i = 0; i < Components.Length; i++)
+            else
             {
-                if (i < v.Components.Length)
+                for (int i = 0; i < Components.Length; i++)
                 {
-                    vector.Components[i] -= v.Components[i];
+                    if (i < v.Components.Length)
+                    {
+                        Components[i] -= v.Components[i];
+                    }
                 }
-
-                vector.Components[i] = Components[i];
             }
 
-            return vector;
+            return this;
         }
 
         public Vector GetProductWithScalar(int scalar)
         {
-            Vector vector = new Vector(this);
-
-            for (int i = 0; i < vector.Components.Length; i++)
+            for (int i = 0; i < Components.Length; i++)
             {
-                vector.Components[i] *= scalar;
+                Components[i] *= scalar;
             }
 
-            return vector;
+            return this;
         }
 
         public Vector GetTurn()
         {
-            Vector vector = new Vector(this);
-
             int turnIndex = -1;
 
-            for (int i = 0; i < vector.Components.Length; i++)
+            for (int i = 0; i < Components.Length; i++)
             {
-                vector.Components[i] *= turnIndex;
+                Components[i] *= turnIndex;
             }
 
-            return vector;
+            return this;
         }
 
         public double GetLength()
@@ -174,7 +181,7 @@ namespace Vector
         {
             if (index >= GetSize() || index < 0)
             {
-                throw new ArgumentOutOfRangeException("index must be >=0 and < vector's size", nameof(index));
+                throw new IndexOutOfRangeException("index must be >= 0 and < vector's size");
             }
 
             return Components[index];
@@ -184,7 +191,7 @@ namespace Vector
         {
             if (index >= GetSize() || index < 0)
             {
-                throw new ArgumentOutOfRangeException("index must be >=0 and < vector's size", nameof(index));
+                throw new IndexOutOfRangeException("index must be >= 0 and < vector's size");
             }
 
             Components[index] = element;
@@ -203,10 +210,10 @@ namespace Vector
 
             Vector v = (Vector)obj;
 
-            return Components.Length == v.Components.Length && IsComponentsEquals(Components, v.Components);
+            return AreComponentsEqual(Components, v.Components);
         }
 
-        public bool IsComponentsEquals(double[] array1, double[] array2)
+        public bool AreComponentsEqual(double[] array1, double[] array2)
         {
             if (array1.Length != array2.Length)
             {
@@ -215,8 +222,7 @@ namespace Vector
 
             for (int i = 0; i < array1.Length; i++)
             {
-                const double epsilon = 1.0e-10;
-                if (Math.Abs(array1[i] - array2[i]) > epsilon)
+                if (array1[i] != array2[i])
                 {
                     return false;
                 }
@@ -230,9 +236,9 @@ namespace Vector
             int prime = 37;
             int hash = 1;
 
-            for (int i = 0; i < Components.Length; i++)
+            foreach (double е in Components)
             {
-                hash = prime * hash + Components[i].GetHashCode();
+                hash = prime * hash + е.GetHashCode();
             }
 
             return hash;
@@ -240,28 +246,26 @@ namespace Vector
 
         public static Vector GetSum(Vector v1, Vector v2)
         {
-            Vector newVector = new Vector(v1.Components);
-            return newVector.GetSum(v2);
+            return new Vector(v1).GetSum(v2);
         }
 
         public static Vector GetDifference(Vector v1, Vector v2)
         {
-            Vector newVector = new Vector(v1.Components);
-            return newVector.GetDifference(v2);
+            return new Vector(v1).GetDifference(v2);
         }
 
         public static double GetScalarProductOfVectors(Vector v1, Vector v2)
         {
             int minLength = Math.Min(v1.Components.Length, v2.Components.Length);
 
-            double scalarProductOfVector = 0;
+            double scalarProductOfVectors = 0;
 
             for (int i = 0; i < minLength; i++)
             {
-                scalarProductOfVector += v1.Components[i] * v2.Components[i];
+                scalarProductOfVectors += v1.Components[i] * v2.Components[i];
             }
 
-            return scalarProductOfVector;
+            return scalarProductOfVectors;
         }
     }
 }
