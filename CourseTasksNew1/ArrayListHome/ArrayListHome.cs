@@ -11,58 +11,53 @@ namespace ArrayListHome
     {
         static void Main(string[] args)
         {
-            using (StreamReader reader = new StreamReader("..\\..\\TextFile.txt"))
+            try
             {
-                try
+                using (StreamReader reader = new StreamReader("..\\..\\TextFile.txt"))
                 {
-                    string line = reader.ReadToEnd();
-                    string[] fileText = line.Split(new string[] { ". " }, StringSplitOptions.RemoveEmptyEntries);
-
                     List<string> text = new List<string>();
 
-                    foreach (string е in fileText)
+                    string currentLine;
+                    while ((currentLine = reader.ReadLine()) != null)
                     {
-                        text.Add(е);
+                        text.Add(currentLine);
                     }
 
-                    Console.WriteLine(String.Join(" . ", text));
-                }
-                catch (FileNotFoundException)
-                {
-                    throw new FileNotFoundException("file doesn't exist");
+                    Console.WriteLine(string.Join(" ", text));
                 }
             }
+            catch (FileNotFoundException е)
+            {
+                Console.WriteLine("Ошибка при чтении файла");
+            }
 
-            List<int> integers = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8 };
+            List<int> integers = new List<int> { 1, 2, 3, 4, 4, 6, 7, 8, 5, 10 };
 
             for (int i = 0; i < integers.Count; i++)
             {
                 if (integers[i] % 2 == 0)
                 {
                     integers.RemoveAt(i);
+                    i--;
                 }
             }
 
-            Console.WriteLine(String.Join(" , ", integers));
+            Console.WriteLine(string.Join(" , ", integers));
 
-            List<int> numbers = new List<int> { 1, 1, 3, 2, 5, 5, 7, 2 };
+            List<int> numbers = new List<int> { 1, 1, 3, 2, 5, 5, 7, 2, 6, 6, 1 };
 
             List<int> newNumbers = new List<int>();
 
             for (int i = 0; i < numbers.Count; i++)
             {
-                newNumbers.Add(numbers[i]);
-
-                for (int j = 0; j < newNumbers.Count - 1; j++)
+                if (!newNumbers.Contains(numbers[i]))
                 {
-                    if (newNumbers[j] == numbers[i])
-                    {
-                        newNumbers.RemoveAt(newNumbers.Count - 1);
-                    }
+                    newNumbers.Add(numbers[i]);
                 }
             }
 
-            Console.WriteLine(String.Join(" , ", newNumbers));
+            Console.WriteLine(string.Join(" , ", newNumbers));
         }
     }
 }
+
