@@ -26,7 +26,7 @@ namespace ArrayListHome
                     Console.WriteLine(string.Join(" ", text));
                 }
             }
-            catch (FileNotFoundException е)
+            catch (FileNotFoundException)
             {
                 Console.WriteLine("Ошибка при чтении файла");
             }
@@ -48,11 +48,11 @@ namespace ArrayListHome
 
             List<int> newNumbers = new List<int>();
 
-            for (int i = 0; i < numbers.Count; i++)
+            foreach (int е in numbers)
             {
-                if (!newNumbers.Contains(numbers[i]))
+                if (!newNumbers.Contains(е))
                 {
-                    newNumbers.Add(numbers[i]);
+                    newNumbers.Add(е);
                 }
             }
 
