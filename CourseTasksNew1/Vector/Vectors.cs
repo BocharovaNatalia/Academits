@@ -13,7 +13,7 @@ namespace Vector
             Vector v1 = new Vector(5);
             Vector v2 = new Vector(v1);
             Vector v3 = new Vector(new double[] { 1, 2, 3, 4, 5, 6, 8 });
-            Vector v4 = new Vector(new double[] { 0, 3, 5, 8, 10, 12, 14, 15 });
+            Vector v4 = new Vector(new double[] { 0, 3, 5, 8, 10, 12, 14, 16 });
 
             Console.WriteLine(v1.ToString());
             Console.WriteLine(v2.ToString());

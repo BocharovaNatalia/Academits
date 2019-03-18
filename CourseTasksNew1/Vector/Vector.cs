@@ -37,9 +37,9 @@ namespace Vector
 
         public Vector(double[] components)
         {
-            if (components == null)
+            if (components.Length == 0)
             {
-                throw new ArgumentNullException(nameof(components), "components can't be null");
+                throw new ArgumentException("components length must be > 0", nameof(components));
             }
 
             Components = new double[components.Length];
@@ -53,9 +53,9 @@ namespace Vector
                 throw new ArgumentException("dimension must be > 0", nameof(dimension));
             }
 
-            if (components == null)
+            if (components.Length == 0)
             {
-                throw new ArgumentNullException(nameof(components), "components can't be null");
+                throw new ArgumentException("components length must be > 0", nameof(components));
             }
 
             Components = new double[dimension];
@@ -73,72 +73,36 @@ namespace Vector
             return string.Format("{{ {0} }}", string.Join(", ", Components));
         }
 
-        private static Vector GetMaxVector(Vector v1, Vector v2)
-        {
-            if (v1.GetSize() > v2.GetSize())
-            {
-                return v1;
-            }
-            return v2;
-        }
-
-        private static Vector GetMinVector(Vector v1, Vector v2)
-        {
-            if (v1.GetSize() < v2.GetSize())
-            {
-                return v1;
-            }
-            return v2;
-        }
-
         public Vector GetSum(Vector v)
         {
-            Vector maxVector = GetMaxVector(this, v);
-            Vector minVector = GetMinVector(this, v);
-
-            double[] newComponents = new double[maxVector.Components.Length];
-
-            for (int i = 0; i < maxVector.Components.Length; i++)
+            if (GetSize() < v.GetSize())
             {
-                if (i < minVector.Components.Length)
-                {
-                    newComponents[i] = maxVector.Components[i] + minVector.Components[i];
-                }
-                else
-                {
-                    newComponents[i] = maxVector.Components[i];
-                }
+                double[] newComponents = new double[v.Components.Length];
+                Array.Copy(Components, newComponents, Components.Length);
+                Components = newComponents;
             }
 
-            Components = newComponents;
+            for (int i = 0; i < v.Components.Length; i++)
+            {
+                Components[i] += v.Components[i];
+            }
 
             return this;
         }
 
         public Vector GetDifference(Vector v)
         {
-            Vector maxVector = GetMaxVector(this, v);
-            Vector minVector = GetMinVector(this, v);
-
-            double[] newComponents = new double[maxVector.Components.Length];
-
-            for (int i = 0; i < maxVector.Components.Length; i++)
+            if (GetSize() < v.GetSize())
             {
-                if (i < minVector.Components.Length)
-                {
-                    newComponents[i] = Components[i] - v.Components[i];
-                }
-                else if (GetSize() < v.GetSize())
-                {
-                    newComponents[i] = -v.Components[i];
-                }
-                else
-                {
-                    newComponents[i] = Components[i];
-                }
+                double[] newComponents = new double[v.Components.Length];
+                Array.Copy(Components, newComponents, Components.Length);
+                Components = newComponents;
             }
 
-            Components = newComponents;
+            for (int i = 0; i < v.Components.Length; i++)
+            {
+                Components[i] -= v.Components[i];
+            }
 
             return this;
         }
