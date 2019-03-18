@@ -37,9 +37,13 @@ namespace Vector
 
         public Vector(double[] components)
         {
-            if (components.Length == 0)
+            if (components == null)
             {
-                throw new ArgumentException("components length must be > 0", nameof(components));
+                throw new ArgumentNullException(nameof(components), "components can't be null");
+            }
+            else if (components.Length == 0)
+            {
+                throw new ArgumentException("component's length must be > 0", nameof(components));
             }
 
             Components = new double[components.Length];
@@ -53,9 +57,9 @@ namespace Vector
                 throw new ArgumentException("dimension must be > 0", nameof(dimension));
             }
 
-            if (components.Length == 0)
+            if (components == null)
             {
-                throw new ArgumentException("components length must be > 0", nameof(components));
+                throw new ArgumentNullException(nameof(components), "components can't be null");
             }
 
             Components = new double[dimension];
